@@ -1,4 +1,5 @@
 import os
+from openai.types.chat import ChatCompletionFunctionToolParam
 
 def get_files_info(working_directory: str, directory: str = ".") -> str:
     try:
@@ -28,3 +29,21 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         return intro_str + info_str + "\n"
     except Exception as e:
         return f"Error: {e}\n"
+
+#JSON descriptor for LLM
+schema_get_files_info: ChatCompletionFunctionToolParam = {
+    "type": "function",
+    "function": {
+        "name": "get_files_info",
+        "description": "Lists files in a specified directory relative to the working directory, providing file size and directory status",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "directory": {
+                    "type": "string",
+                    "description": "Directory path to list files from, relative to the working directory (default is the working directory itself)",
+                },
+            },
+        },
+    },
+}
