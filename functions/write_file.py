@@ -1,4 +1,6 @@
 import os
+from openai.types.chat import ChatCompletionFunctionToolParam
+
 
 def write_file(working_directory: str, file_path: str, content: str) -> str:
     try:
@@ -17,3 +19,26 @@ def write_file(working_directory: str, file_path: str, content: str) -> str:
         return f'Successfully wrote to "{file_path}" ({len(content)} characters written)'
     except Exception as e:
         return f"Error: {e}"
+
+#JSON descriptor for LLM
+schema_write_file: ChatCompletionFunctionToolParam = {
+    "type": "function",
+    "function": {
+        "name": "write_file",
+        "description": "Writes content to a given file path. Path is relative to the working directory.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Path to a file to be written. Path is relative to the working directory.",
+                },
+                "content": {
+                    "type": "string",
+                    "description": "Content to be written to file specified by file_path."
+                },
+            },
+            "required":["file_path", "content"]
+        },
+    },
+}

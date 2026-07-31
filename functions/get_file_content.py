@@ -1,5 +1,7 @@
 import os
 from config import MAX_CHARS
+from openai.types.chat import ChatCompletionFunctionToolParam
+
 
 def get_file_content(working_directory: str, file_path: str) -> str:
     try:
@@ -20,3 +22,22 @@ def get_file_content(working_directory: str, file_path: str) -> str:
     except Exception as e:
         
         return f"Error: {e}"
+
+#JSON descriptor for LLM
+schema_get_file_content: ChatCompletionFunctionToolParam = {
+    "type": "function",
+    "function": {
+        "name": "get_file_content",
+        "description": "Retrieve content from a file specified by the file path, relative to the working directory.",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Path to a file, relative to the working directory, whose contents will be read and returned.",
+                },
+            },
+            "required":["file_path"]
+        },
+    },
+}
